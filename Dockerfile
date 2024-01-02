@@ -17,9 +17,9 @@ WORKDIR /app
 
 RUN curl -sSL https://install.python-poetry.org/ | python3 -
 
-COPY ./../pyproject.toml /app/
+COPY pyproject.toml /app/
 RUN poetry install --no-root
 
-COPY . /app
+COPY LIKE-FastAPI-ver /app
 
-CMD ["bash", "run.sh"]
+CMD ["uvicorn", "main:app", "--reload", "--host", "0.0.0.0", "--port", "8080"]
