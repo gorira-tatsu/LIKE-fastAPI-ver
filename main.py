@@ -4,6 +4,8 @@ from typing import Optional  # 追加
 import motor.motor_asyncio
 from fastapi import FastAPI
 
+from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI()
 client = motor.motor_asyncio.AsyncIOMotorClient(
     "mongo", 27017, username="root", password="example"
@@ -11,6 +13,19 @@ client = motor.motor_asyncio.AsyncIOMotorClient(
 db = client.get_database("diary")
 collection = db.get_collection("diary")
 
+
+origins = [
+    "http://localhost",
+    "http://127.0.0.1"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.post("/diary/{day}/{name}/{text}")
 async def make_diary(day: str, name: str, text: str, q: Optional[str] = None):  # 修正
